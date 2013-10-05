@@ -1,6 +1,5 @@
 module Jawgem
   module Meals
-
     def meals(opts)
       get_collection("/users/#{@user_id}/meals", params_from_time_data(opts))
     end
