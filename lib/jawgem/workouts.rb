@@ -1,35 +1,34 @@
 module Jawgem
   module Workouts
-    # WORKOUT_TYPES = {
-    #   walk: 1,
-    #   run: 2,
-    #   lift_weights: 3, 
-    #   4  cross_train
-    #   5  nike_training
-    #   6  yoga
-    #   7  pilates
-    #   8  body weight exercise **
-    #   9  crossfit **
-    #   10   p90x **
-    #   11   zumba **
-    #   12   trx **
-    #   13   swim
-    #   14   bike
-    #   15   elliptical
-    #   16   bar method **
-    #   17   kinect exercises **
-    #   18   tennis
-    #   19   basketball
-    #   20   golf **
-    #   21   soccer
-    #   22   ski snowboard
-    #   23   dance
-    #   24   hike
-    #   25   cross country skiing
-    #   26   stationary bike
-    #   27   cardio
-    #   28   game
-    # }
+    WALK = 1
+    RUN = 2
+    LIFT_WEIGHTS = 3
+    CROSS_TRAIN = 4
+    NIKE_TRAINING = 5
+    YOGA = 6
+    PILATES = 7
+    BODY_WEIGHT_EXERCISE = 8
+    CROSSFIT = 9
+    P90X = 10
+    ZUMBA = 11
+    TRX = 12
+    SWIM = 13
+    BIKE = 14
+    ELLIPTICAL = 15
+    BAR_METHOD = 16
+    KINECT_EXERCISES = 17
+    TENNIS = 18
+    BASKETBALL = 19
+    GOLF = 20
+    SOCCER = 21
+    SKI_SNOWBOARD = 22
+    DANCE = 23
+    HIKE = 24
+    CROSS_COUNTRY_SKIING = 25
+    STATIONARY_BIKE = 26
+    CARDIO = 27
+    GAME = 28
+
     def workouts(opts)
       get_collection("/users/#{@user_id}/workouts", params_from_time_data(opts))
     end
@@ -43,11 +42,27 @@ module Jawgem
     end
 
     def create_workout(opts)
+      post("/users/#{@user_id}/workouts", parse_params(opts))
+    end
+
+    def update_workout(xid, opts)
+      post("/workouts/#{xid}/partialUpdate", parse_params(opts))
+    end
+
+    def delete_workout(xid)
+      delete("/workouts/#{xid}")
+    end
+
+    private
+    def parse_params(opts)
       raise Jawgem::MissingParameterError, "time_created or time_completed is missing." if opts[:time_created].nil? || opts[:time_completed].nil?
       params = {}
       params[:time_created] = opts[:time_created].to_i
       params[:time_completed] = opts[:time_completed].to_i
-      post("/users/#{@user_id}/workouts", params)
+      params[:sub_type] = opts[:workout_type]
+      params[:calories] = opts[:calories] if opts[:calories]
+      params[:image_url] = opts[:image_url] if opts[:image_url]
+      params[:intensity] = opts[:intensity] if opts[:intensity]
     end
   end
 end

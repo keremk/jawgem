@@ -2,6 +2,8 @@ require 'jawgem/version'
 require 'jawgem/profile'
 require 'jawgem/moves'
 require 'jawgem/sleeps'
+require 'jawgem/workouts'
+require 'jawgem/workout_type'
 require 'jawgem/helpers'
 require 'jawgem/collection'
 require 'jawgem/errors'
@@ -13,6 +15,7 @@ module Jawgem
     include Profile
     include Moves
     include Sleeps
+    include Workouts
 
     attr_accessor :user_id 
 
@@ -66,6 +69,10 @@ module Jawgem
         { params: content, 
           headers: { 'Content-Type' => 'application/x-www-form-urlencoded'}
         })
+    end
+
+    def delete(path) 
+      parse_item access_token.delete("#{@prefix}#{path}")
     end
 
     private 
