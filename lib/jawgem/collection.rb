@@ -6,7 +6,7 @@ module Jawgem
     end
 
     def items
-      @data[:data]
+      @data[:data] || @data[:items]
     end
 
     def size 

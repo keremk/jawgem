@@ -10,23 +10,17 @@ module Jawgem
       get("/users/#{@user_id}/friends")
     end
 
-    def mood(date = nil)
-      params = {}
-      params[:date] = date_to_int(date) if date
-      get("/users/#{@user_id}/mood")
+    def trends(opts = {})
+      get_collection("/users/#{@user_id}/trends", params)  
     end
 
-    def trends(opts = {})
-      end_date = date_to_int(opts[:end_date] || Time.now )
-      range_duration, range = seconds_to_range_duration(opts[:duration] || 3600)
-      bucket_size = opts[:bucket_size] || "d"
-      params = {
-        end_date: end_date,
-        range_duration: range_duration,
-        range: range,
-        bucket_size: bucket_size
-      }
-      get_collection("/users/#{@user_id}/trends", params)  
+    private 
+    def params(opts)
+      params = {}
+      params[:end_date] = date_to_int(opts[:end_date] || Time.now )
+      params[:range_duration], params[:range] = seconds_to_range_duration(opts[:duration] || 3600)
+      params[:bucket_size] = opts[:bucket_size] || "d"
+      params
     end
   end
 end

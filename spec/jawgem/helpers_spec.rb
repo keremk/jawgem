@@ -28,5 +28,15 @@ module Jawgem
       params[:start_time].should == @yesterday.to_i
       params[:end_time].should == @date.end_of_day.to_i
     end 
+
+    it 'creates parameters for the location data' do 
+      opts = { lat: 37.793507, lon: -122.422719, name: "Fooland", accuracy: 10 }
+      params = Test.new.params_from_location_data(opts)
+      params[:place_lat].should == 37.793507
+      params[:place_lon].should == -122.422719
+      params[:place_name].should == "Fooland"
+      params[:place_acc].should == 10.0
+    end
+    
   end
 end

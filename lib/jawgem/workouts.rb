@@ -42,11 +42,13 @@ module Jawgem
     end
 
     def create_workout(opts)
-      post("/users/#{@user_id}/workouts", parse_params(opts))
+      post("/users/#{@user_id}/workouts", params(opts))
     end
 
     def update_workout(xid, opts)
-      post("/workouts/#{xid}/partialUpdate", parse_params(opts))
+      # Update is a post, instead of a put based on Jawbone API documentation.
+      # https://jawbone.com/up/developer/endpoints/workouts
+      post("/workouts/#{xid}/partialUpdate", params(opts))
     end
 
     def delete_workout(xid)
@@ -54,15 +56,20 @@ module Jawgem
     end
 
     private
-    def parse_params(opts)
-      raise Jawgem::MissingParameterError, "time_created or time_completed is missing." if opts[:time_created].nil? || opts[:time_completed].nil?
+    def params(opts)
       params = {}
-      params[:time_created] = opts[:time_created].to_i
-      params[:time_completed] = opts[:time_completed].to_i
+      params.merge!(params_from_time_data(opts))
+      params.merge!(params_from_workout(opts))
+      params
+    end
+
+    def params_from_workout(opts)
+      params = {}
       params[:sub_type] = opts[:workout_type]
       params[:calories] = opts[:calories] if opts[:calories]
       params[:image_url] = opts[:image_url] if opts[:image_url]
       params[:intensity] = opts[:intensity] if opts[:intensity]
+      params
     end
   end
 end

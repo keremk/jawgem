@@ -3,7 +3,10 @@ require 'jawgem/profile'
 require 'jawgem/moves'
 require 'jawgem/sleeps'
 require 'jawgem/workouts'
-require 'jawgem/workout_type'
+require 'jawgem/mood'
+require 'jawgem/cardiac'
+require 'jawgem/meals'
+require 'jawgem/body'
 require 'jawgem/helpers'
 require 'jawgem/collection'
 require 'jawgem/errors'
@@ -16,6 +19,10 @@ module Jawgem
     include Moves
     include Sleeps
     include Workouts
+    include Meals
+    include Cardiac
+    include Mood
+    include Body
 
     attr_accessor :user_id 
 
